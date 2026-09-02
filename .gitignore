@@ -1,0 +1,8 @@
+# codeblocks files
+*.cbp
+*.depend
+*.layout
+
+# ignore build
+bin/
+obj/
