@@ -29,11 +29,45 @@ struct Position2D {
     int y;
 };
 
-struct Panel {
-    Layer layer;
-    Position2D startPos;
-    Position2D endPos;
-    string color;
+class Panel {
+    public:
+        Panel(Position2D start, Position2D end, string color, int layerValue)
+        : startPos(start), endPos(end), color(color), layer{ layerValue, true} {}
+
+        void draw() {
+            moveCursor(x0, y0);
+            cout << "+";
+
+            for (int x = x0 + 1; x < x1; x++)
+                cout << "-";
+
+            cout << "+";
+
+            for (int y = y0 + 1; y < y1; y++)
+            {
+                moveCursor(x0, y);
+                cout << "|";
+
+                for (int x = x0 + 1; x < x1; x++)
+                    cout << " ";
+
+                cout << "|";
+            }
+
+            moveCursor(x0, y1);
+            cout << "+";
+
+            for (int x = x0 + 1; x < x1; x++)
+                cout << "-";
+
+            cout << "+";
+        }
+
+    private:
+        Layer layer;
+        Position2D startPos;
+        Position2D endPos;
+        string color;
 };
 
 struct ToolbarButton {
@@ -58,40 +92,6 @@ void init()
     cout << CLEAR_SCREEN;
     cout << MOVE_HOME;
     cout << HIDE_CURSOR;
-}
-
-// Simple DOS-style window
-void makeWindow(int x0, int y0, int x1, int y1)
-{
-    // Top border
-    moveCursor(x0, y0);
-    cout << "+";
-
-    for (int x = x0 + 1; x < x1; x++)
-        cout << "-";
-
-    cout << "+";
-
-    // Window contents
-    for (int y = y0 + 1; y < y1; y++)
-    {
-        moveCursor(x0, y);
-        cout << "|";
-
-        for (int x = x0 + 1; x < x1; x++)
-            cout << " ";
-
-        cout << "|";
-    }
-
-    // Bottom border
-    moveCursor(x0, y1);
-    cout << "+";
-
-    for (int x = x0 + 1; x < x1; x++)
-        cout << "-";
-
-    cout << "+";
 }
 
 void shutdown()
@@ -122,11 +122,11 @@ void drawToolbar() {
 
 
 void drawUi() {
+    // Main DOS window
+    makeWindow({5, 3}, {75, 22});
+
     // draw toolbar
     drawToolbar();
-
-    // Main DOS window
-    makeWindow(5, 3, 75, 22);
 
     moveCursor(30, 3);
     cout << "[ ";
@@ -159,9 +159,6 @@ int main()
         cout << "Welcome to the TermDRAW! Easy-to-use terminal drawing tool";
         moveCursor(8, 12);
         cout << "Made by Ilnur Sultanov (c) 2026";
-
-        moveCursor(8, 20);
-        cout << "Press ENTER to exit...";
 
         cout.flush();
 
