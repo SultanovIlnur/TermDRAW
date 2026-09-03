@@ -2,6 +2,7 @@
 #include <string>
 #include <termios.h>
 #include <unistd.h>
+#include <sys/ioctl.h>
 
 #include "main.h"
 
@@ -135,20 +136,27 @@ void drawToolbar() {
 
 }
 
+Position2D getTerminalSize() {
+    struct winsize w;
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+    return {w.ws_col, w.ws_row};
+}
 
 void drawUi() {
     // Main DOS window
+    Panel mainWindow {{1, 1}, getTerminalSize(), DOS_COLOR, 0};
+    mainWindow.draw();
 
+    moveCursor((getTerminalSize().x - 1 - DEFAULT_PROJECT_NAME.length() - 2) / 2, 1);
+    cout << "[ TermDRAW - ";
+    if (projectName.empty()) {
+        cout << "*";
+        cout << " " << DEFAULT_PROJECT_NAME;
+    }
+    cout << projectName << " ]";
 
     // draw toolbar
     drawToolbar();
-
-    moveCursor(30, 3);
-    cout << "[ ";
-    if (projectName.empty()) {
-        cout << "*";
-    }
-    cout << projectName << " ]";
 
     // moveCursor(8, 4);
     // cout << "File";
