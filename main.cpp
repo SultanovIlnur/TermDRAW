@@ -1,5 +1,9 @@
 #include <iostream>
 #include <string>
+#include <termios.h>
+#include <unistd.h>
+
+#include "main.h"
 
 // Ilnur Sultanov (C) 2026
 
@@ -18,6 +22,8 @@ const string DOS_COLOR = "\033[93;44m";
 const string DEFAULT_PROJECT_NAME = "Unnamed project";
 
 string projectName;
+bool running = true;
+struct termios originalTermios;
 
 struct Layer {
     int value;
@@ -35,29 +41,29 @@ class Panel {
         : startPos(start), endPos(end), color(color), layer{ layerValue, true} {}
 
         void draw() {
-            moveCursor(x0, y0);
+            moveCursor(startPos.x, startPos.y);
             cout << "+";
 
-            for (int x = x0 + 1; x < x1; x++)
+            for (int x = startPos.x + 1; x < endPos.x; x++)
                 cout << "-";
 
             cout << "+";
 
-            for (int y = y0 + 1; y < y1; y++)
+            for (int y = startPos.y + 1; y < endPos.y; y++)
             {
-                moveCursor(x0, y);
+                moveCursor(startPos.x, y);
                 cout << "|";
 
-                for (int x = x0 + 1; x < x1; x++)
+                for (int x = startPos.x + 1; x < endPos.x; x++)
                     cout << " ";
 
                 cout << "|";
             }
 
-            moveCursor(x0, y1);
+            moveCursor(startPos.x, endPos.y);
             cout << "+";
 
-            for (int x = x0 + 1; x < x1; x++)
+            for (int x = startPos.x + 1; x < endPos.x; x++)
                 cout << "-";
 
             cout << "+";
@@ -87,6 +93,10 @@ void moveCursor(int x, int y)
 
 void init()
 {
+    tcgetattr(STDIN_FILENO, &originalTermios);
+    struct termios raw = originalTermios;
+    raw.c_lflag &= ~(ECHO | ICANON);
+    tcsetattr(STDIN_FILENO, TCSANOW, &raw);
     // settings dos colors
     cout << DOS_COLOR;
     cout << CLEAR_SCREEN;
@@ -96,6 +106,7 @@ void init()
 
 void shutdown()
 {
+    tcsetattr(STDIN_FILENO, TCSANOW, &originalTermios);
     cout << RESET;
     cout << SHOW_CURSOR;
     cout << CLEAR_SCREEN;
@@ -107,6 +118,10 @@ int getCaptionDistance(string inputText) {
 }
 
 void drawToolbarButton(string buttonText) {
+
+}
+
+void getToolbarOptions() {
 
 }
 
@@ -123,7 +138,7 @@ void drawToolbar() {
 
 void drawUi() {
     // Main DOS window
-    makeWindow({5, 3}, {75, 22});
+
 
     // draw toolbar
     drawToolbar();
@@ -152,17 +167,22 @@ int main()
 {
     init();
 
-    while (true) {
+    while (running) {
         drawUi();
 
         moveCursor(8, 9);
         cout << "Welcome to the TermDRAW! Easy-to-use terminal drawing tool";
         moveCursor(8, 12);
         cout << "Made by Ilnur Sultanov (c) 2026";
+        moveCursor(8, 15);
+        cout << "Press q key to quit the program";
 
         cout.flush();
 
-        cin.get();
+        char c = cin.get();
+        if (c == 'q') {
+            running = false;
+        }
     }
 
     shutdown();
