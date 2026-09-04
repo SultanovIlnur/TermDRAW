@@ -4,7 +4,9 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
-#include "main.hpp"
+#include "src/MenuItem.hpp"
+#include "src/Panel.hpp"
+#include "src/Screen.hpp"
 
 // Ilnur Sultanov (C) 2026
 
@@ -24,56 +26,8 @@ std::string projectName;
 bool running = true;
 struct termios originalTermios;
 
-struct Layer {
-    int value;
-    bool visibility;
-};
-
-struct Position2D {
-    int x;
-    int y;
-};
-
-class Panel {
-    public:
-        Panel(Position2D start, Position2D end, std::string color, int layerValue)
-        : startPos(start), endPos(end), color(color), layer{ layerValue, true} {}
-
-        void draw() {
-            moveCursor(startPos.x, startPos.y);
-            std::cout << "+";
-
-            for (int x = startPos.x + 1; x < endPos.x; x++)
-                std::cout << "-";
-
-            std::cout << "+";
-
-            for (int y = startPos.y + 1; y < endPos.y; y++)
-            {
-                moveCursor(startPos.x, y);
-                std::cout << "|";
-
-                for (int x = startPos.x + 1; x < endPos.x; x++)
-                    std::cout << " ";
-
-                std::cout << "|";
-            }
-
-            moveCursor(startPos.x, endPos.y);
-            std::cout << "+";
-
-            for (int x = startPos.x + 1; x < endPos.x; x++)
-                std::cout << "-";
-
-            std::cout << "+";
-        }
-
-    private:
-        Layer layer;
-        Position2D startPos;
-        Position2D endPos;
-        std::string color;
-};
+std::vector<MenuSection> menus;
+int activeMenu = -1;
 
 struct ToolbarButton {
     Layer layer;
@@ -85,13 +39,29 @@ struct ToolbarButton {
 struct Toolbar {
 };
 
-void moveCursor(int x, int y)
-{
-    std::cout << "\033[" << y << ";" << x << "H";
+
+
+void initMenu() {
+    menus.push_back({
+        "File",
+        {
+            {"New file",  nullptr},
+            {"Open file", nullptr},
+            {"Save file", nullptr},
+            {"Exit",      nullptr}
+        }
+    });
+    menus.push_back({
+        "Help",
+        {
+            {"About", nullptr}
+        }
+    });
 }
 
 void init()
 {
+    initMenu();
     tcgetattr(STDIN_FILENO, &originalTermios);
     struct termios raw = originalTermios;
     raw.c_lflag &= ~(ECHO | ICANON);
@@ -194,4 +164,31 @@ int main()
     shutdown();
 
     return 0;
+}
+
+void initMenu() {
+    MenuSection fileMenu;
+    fileMenu.title = "File";
+    fileMenu.items.push_back({"New file", nullptr});
+    fileMenu.items.push_back({"Open file", nullptr});
+    fileMenu.items.push_back({"Save file", nullptr});
+    fileMenu.items.push_back({"Exit", nullptr});
+
+    MenuSection editMenu;
+    editMenu.title = "Edit";
+    // TODO ADD ITEMS
+
+    MenuSection optionMenu;
+    optionMenu.title = "Option";
+    // TODO ADD ITEMS
+
+    MenuSection helpMenu;
+    helpMenu.title = "Help";
+    helpMenu.items.push_back({"About", actionAbout});
+    helpMenu.items.push_back({"Settings", nullptr});
+
+    menus.push_back(fileMenu);
+    menus.push_back(editMenu);
+    menus.push_back(optionMenu);
+    menus.push_back(helpMenu);
 }
