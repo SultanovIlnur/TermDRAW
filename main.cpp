@@ -4,25 +4,23 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
-#include "main.h"
+#include "main.hpp"
 
 // Ilnur Sultanov (C) 2026
 
 // 02 Sept 2026: This is only a boilerplate code that I'm planning to rework later
 
-using namespace std;
+const std::string CLEAR_SCREEN = "\033[2J";
+const std::string RESET        = "\033[0m";
+const std::string MOVE_HOME    = "\033[H";
+const std::string HIDE_CURSOR  = "\033[?25l";
+const std::string SHOW_CURSOR  = "\033[?25h";
 
-const string CLEAR_SCREEN = "\033[2J";
-const string RESET        = "\033[0m";
-const string MOVE_HOME    = "\033[H";
-const string HIDE_CURSOR  = "\033[?25l";
-const string SHOW_CURSOR  = "\033[?25h";
+const std::string DOS_COLOR = "\033[93;44m";
 
-const string DOS_COLOR = "\033[93;44m";
+const std::string DEFAULT_PROJECT_NAME = "Unnamed project";
 
-const string DEFAULT_PROJECT_NAME = "Unnamed project";
-
-string projectName;
+std::string projectName;
 bool running = true;
 struct termios originalTermios;
 
@@ -38,48 +36,48 @@ struct Position2D {
 
 class Panel {
     public:
-        Panel(Position2D start, Position2D end, string color, int layerValue)
+        Panel(Position2D start, Position2D end, std::string color, int layerValue)
         : startPos(start), endPos(end), color(color), layer{ layerValue, true} {}
 
         void draw() {
             moveCursor(startPos.x, startPos.y);
-            cout << "+";
+            std::cout << "+";
 
             for (int x = startPos.x + 1; x < endPos.x; x++)
-                cout << "-";
+                std::cout << "-";
 
-            cout << "+";
+            std::cout << "+";
 
             for (int y = startPos.y + 1; y < endPos.y; y++)
             {
                 moveCursor(startPos.x, y);
-                cout << "|";
+                std::cout << "|";
 
                 for (int x = startPos.x + 1; x < endPos.x; x++)
-                    cout << " ";
+                    std::cout << " ";
 
-                cout << "|";
+                std::cout << "|";
             }
 
             moveCursor(startPos.x, endPos.y);
-            cout << "+";
+            std::cout << "+";
 
             for (int x = startPos.x + 1; x < endPos.x; x++)
-                cout << "-";
+                std::cout << "-";
 
-            cout << "+";
+            std::cout << "+";
         }
 
     private:
         Layer layer;
         Position2D startPos;
         Position2D endPos;
-        string color;
+        std::string color;
 };
 
 struct ToolbarButton {
     Layer layer;
-    string caption;
+    std::string caption;
 
 
 };
@@ -89,7 +87,7 @@ struct Toolbar {
 
 void moveCursor(int x, int y)
 {
-    cout << "\033[" << y << ";" << x << "H";
+    std::cout << "\033[" << y << ";" << x << "H";
 }
 
 void init()
@@ -99,26 +97,26 @@ void init()
     raw.c_lflag &= ~(ECHO | ICANON);
     tcsetattr(STDIN_FILENO, TCSANOW, &raw);
     // settings dos colors
-    cout << DOS_COLOR;
-    cout << CLEAR_SCREEN;
-    cout << MOVE_HOME;
-    cout << HIDE_CURSOR;
+    std::cout << DOS_COLOR;
+    std::cout << CLEAR_SCREEN;
+    std::cout << MOVE_HOME;
+    std::cout << HIDE_CURSOR;
 }
 
 void shutdown()
 {
     tcsetattr(STDIN_FILENO, TCSANOW, &originalTermios);
-    cout << RESET;
-    cout << SHOW_CURSOR;
-    cout << CLEAR_SCREEN;
-    cout << MOVE_HOME;
+    std::cout << RESET;
+    std::cout << SHOW_CURSOR;
+    std::cout << CLEAR_SCREEN;
+    std::cout << MOVE_HOME;
 }
 
-int getCaptionDistance(string inputText) {
+int getCaptionDistance(std::string inputText) {
     return inputText.length() + 2;
 }
 
-void drawToolbarButton(string buttonText) {
+void drawToolbarButton(std::string buttonText) {
 
 }
 
@@ -148,27 +146,27 @@ void drawUi() {
     mainWindow.draw();
 
     moveCursor((getTerminalSize().x - 1 - DEFAULT_PROJECT_NAME.length() - 2) / 2, 1);
-    cout << "[ TermDRAW - ";
+    std::cout << "[ TermDRAW - ";
     if (projectName.empty()) {
-        cout << "*";
-        cout << " " << DEFAULT_PROJECT_NAME;
+        std::cout << "*";
+        std::cout << " " << DEFAULT_PROJECT_NAME;
     }
-    cout << projectName << " ]";
+    std::cout << projectName << " ]";
 
     // draw toolbar
     drawToolbar();
 
     // moveCursor(8, 4);
-    // cout << "File";
+    // std::cout << "File";
 
     // moveCursor(15, 4);
-    // cout << "Edit";
+    // std::cout << "Edit";
 
     // moveCursor(22, 4);
-    // cout << "Options";
+    // std::cout << "Options";
 
     // moveCursor(32, 4);
-    // cout << "Help";
+    // std::cout << "Help";
 }
 
 int main()
@@ -179,13 +177,13 @@ int main()
         drawUi();
 
         moveCursor(8, 9);
-        cout << "Welcome to the TermDRAW! Easy-to-use terminal drawing tool";
+        std::cout << "Welcome to the TermDRAW! Easy-to-use terminal drawing tool";
         moveCursor(8, 12);
-        cout << "Made by Ilnur Sultanov (c) 2026";
+        std::cout << "Made by Ilnur Sultanov (c) 2026";
         moveCursor(8, 15);
-        cout << "Press q key to quit the program";
+        std::cout << "Press q key to quit the program";
 
-        cout.flush();
+        std::cout.flush();
 
         char c = cin.get();
         if (c == 'q') {
