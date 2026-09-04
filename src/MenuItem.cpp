@@ -1,7 +1,4 @@
-struct MenuItem {
-    string caption;
-    void (*action)();
-};
+#include "MenuItem.hpp"
 
 // текущий layout:
 // 1. file
