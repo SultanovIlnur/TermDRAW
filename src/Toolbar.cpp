@@ -35,8 +35,8 @@ void Toolbar::draw(Focus currentFocus) {
     if (activeSubMenu) {
         const auto& currentSection = menus[selectedButton];
         
-        int menuWidth = 16; // Ширина выпадающей рамки
-        int menuHeight = static_cast<int>(currentSection.items.size()) + 1; // Высота с учётом рамок
+        int menuWidth = 16;
+        int menuHeight = static_cast<int>(currentSection.items.size()) + 1;
         
         Panel popupPanel(
             {selectedX, 3}, 
