@@ -96,6 +96,7 @@ int main()
     init();
     while (running) {
         drawUi();
+        std::cout.flush();
         SpecialKey key = readKey();
         if (key == SpecialKey::KEY_TAB) {
             toggleFocus();

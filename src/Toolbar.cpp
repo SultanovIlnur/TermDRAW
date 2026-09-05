@@ -45,6 +45,10 @@ void Toolbar::draw(Focus currentFocus) {
             1
         );
         popupPanel.draw();
+        for (const auto& item : currentSection.items) {
+            moveCursor(selectedX + 1, 4 + &item - &currentSection.items[0]);
+            std::cout << item.caption;
+        }
     }
 }
 
@@ -88,6 +92,21 @@ bool Toolbar::handleInput(SpecialKey key) {
         case SpecialKey::ARROW_KEY_LEFT:
             if (selectedButton > 0) {
                 selectedButton--;
+            }
+            break;
+        case SpecialKey::ARROW_KEY_DOWN:
+            if (activeSubMenu) {
+                if (selectedSubMenuButton < menus[selectedButton].items.size() - 1) {
+                    selectedSubMenuButton++;
+                }
+            }
+            break;
+        
+        case SpecialKey::ARROW_KEY_UP:
+            if (activeSubMenu) {
+                if (selectedSubMenuButton > 0) {
+                    selectedSubMenuButton--;
+                }
             }
             break;
     }
