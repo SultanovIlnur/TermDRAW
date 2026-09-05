@@ -81,28 +81,6 @@ void shutdown()
     std::cout << MOVE_HOME;
 }
 
-int getCaptionDistance(std::string inputText) {
-    return inputText.length() + 2;
-}
-
-void drawToolbarButton(std::string buttonText) {
-
-}
-
-void getToolbarOptions() {
-
-}
-
-void drawSubToolbar() {
-    // we need to use layers to draw subtoolbar in front of the regular toolbar imo
-}
-
-void drawToolbar() {
-    // firstly we need to draw toolbar button and then put them in an array
-    int currentBtn = 0;
-
-}
-
 Position2D getTerminalSize() {
     struct winsize w;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
@@ -121,21 +99,6 @@ void drawUi() {
         std::cout << " " << DEFAULT_PROJECT_NAME;
     }
     std::cout << projectName << " ]";
-
-    // draw toolbar
-    drawToolbar();
-
-    // moveCursor(8, 4);
-    // std::cout << "File";
-
-    // moveCursor(15, 4);
-    // std::cout << "Edit";
-
-    // moveCursor(22, 4);
-    // std::cout << "Options";
-
-    // moveCursor(32, 4);
-    // std::cout << "Help";
 }
 
 int main()
