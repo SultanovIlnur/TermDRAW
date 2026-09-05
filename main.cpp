@@ -23,7 +23,6 @@ const std::string SHOW_CURSOR  = "\033[?25h";
 
 const std::string DOS_COLOR = "\033[93;44m";
 
-const int KEY_F10 = 0x1B5B31307E;
 const int KEY_TAB = 9;
 
 const std::string DEFAULT_PROJECT_NAME = "Unnamed project";
@@ -79,6 +78,14 @@ void drawUi() {
         std::cout << " " << DEFAULT_PROJECT_NAME;
     }
     std::cout << projectName << " ]";
+
+
+    moveCursor(8, 9);
+    std::cout << "Welcome to the TermDRAW! Easy-to-use terminal drawing tool";
+    moveCursor(8, 12);
+    std::cout << "Made by Ilnur Sultanov (c) 2026";
+    moveCursor(8, 15);
+    std::cout << "Press q key to quit the program";
 }
 
 void toggleFocus() {
@@ -101,11 +108,13 @@ void toggleFocus() {
 int main()
 {
     init();
-    drawUi();
 
     while (running) {
+        drawUi();
+
+
         int key = std::cin.get();
-        if (key == KEY_F10 || key == KEY_TAB) {
+        if (key == KEY_TAB) {
             toggleFocus();
         } else {
             switch (currentFocus) {
@@ -122,13 +131,6 @@ int main()
                     break;
             }
         }
-
-        moveCursor(8, 9);
-        std::cout << "Welcome to the TermDRAW! Easy-to-use terminal drawing tool";
-        moveCursor(8, 12);
-        std::cout << "Made by Ilnur Sultanov (c) 2026";
-        moveCursor(8, 15);
-        std::cout << "Press q key to quit the program";
 
         std::cout.flush();
 

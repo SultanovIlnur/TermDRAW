@@ -11,7 +11,7 @@ int calculateDistance(const std::string& text) {
 void Toolbar::draw() {
     int currentDistance = 1;
     for (const auto& menu : menus) {
-        moveCursor(currentDistance, 1);
+        moveCursor(currentDistance, 2);
         std::cout << "[" << menu.caption << "] ";
         currentDistance += calculateDistance(menu.caption);
     }
@@ -43,4 +43,10 @@ void Toolbar::initMenu() {
     menus.push_back(editMenu);
     menus.push_back(optionMenu);
     menus.push_back(helpMenu);
+}
+
+bool Toolbar::handleInput(int key) {
+    // TODO
+
+    return false;
 }
