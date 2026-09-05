@@ -24,6 +24,7 @@ const std::string SHOW_CURSOR  = "\033[?25h";
 const std::string DOS_COLOR = "\033[93;44m";
 
 const int KEY_TAB = 9;
+const int KEY_Q = 113;
 
 const std::string DEFAULT_PROJECT_NAME = "Unnamed project";
 
@@ -69,7 +70,7 @@ Position2D getTerminalSize() {
 void drawUi() {
     Panel mainWindow {{1, 1}, getTerminalSize(), DOS_COLOR, 0};
     mainWindow.draw();
-    toolbar.draw();
+    toolbar.draw(currentFocus == Focus::Toolbar);
 
     moveCursor((getTerminalSize().x - 1 - DEFAULT_PROJECT_NAME.length() - 2) / 2, 1);
     std::cout << "[ TermDRAW - ";
@@ -108,11 +109,8 @@ void toggleFocus() {
 int main()
 {
     init();
-
     while (running) {
         drawUi();
-
-
         int key = std::cin.get();
         if (key == KEY_TAB) {
             toggleFocus();
@@ -133,9 +131,7 @@ int main()
         }
 
         std::cout.flush();
-
-        char c = std::cin.get();
-        if (c == 'q') {
+        if (key == KEY_Q) {
             running = false;
         }
     }

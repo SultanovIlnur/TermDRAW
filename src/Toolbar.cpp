@@ -1,6 +1,6 @@
 #include "Toolbar.hpp"
 
-Toolbar::Toolbar() : activeMenu(-1) {
+Toolbar::Toolbar() : activeMenu(false), selectedButton(0) {
     initMenu();
 }
 
@@ -8,12 +8,18 @@ int calculateDistance(const std::string& text) {
     return text.length() + 3;
 }
 
-void Toolbar::draw() {
-    int currentDistance = 1;
+void Toolbar::draw(bool isFocused) {
+    unsigned short int currentDistance = 1;
+    unsigned short int i = 0;
     for (const auto& menu : menus) {
         moveCursor(currentDistance, 2);
-        std::cout << "[" << menu.caption << "] ";
-        currentDistance += calculateDistance(menu.caption);
+        if (isFocused && selectedButton == i) {
+            std::cout << "\033[7m"; // inverse color
+        }
+            std::cout << "[" << menu.caption << "] ";
+            currentDistance += calculateDistance(menu.caption);
+            std::cout << "\033[27m"; // reset color
+        i++;
     }
     std::cout << std::endl;
 }

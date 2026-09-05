@@ -12,7 +12,7 @@ class Toolbar {
         Toolbar();
         std::vector<ToolbarButton> buttons;
         
-        void draw();
+        void draw(bool isFocused);
 
         void initMenu();
 
@@ -20,5 +20,6 @@ class Toolbar {
 
     private:
         std::vector<MenuSection> menus;
-        int activeMenu = -1;
+        bool activeMenu = false;
+        int selectedButton = 0;
 };
