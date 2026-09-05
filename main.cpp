@@ -7,6 +7,8 @@
 #include "src/MenuItem.hpp"
 #include "src/Panel.hpp"
 #include "src/Screen.hpp"
+#include "src/Toolbar.hpp"
+#include "src/ToolbarButton.hpp"
 
 // Ilnur Sultanov (C) 2026
 
@@ -28,16 +30,6 @@ struct termios originalTermios;
 
 std::vector<MenuSection> menus;
 int activeMenu = -1;
-
-struct ToolbarButton {
-    Layer layer;
-    std::string caption;
-
-
-};
-
-struct Toolbar {
-};
 
 void initMenu() {
     MenuSection fileMenu;
