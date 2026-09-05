@@ -11,21 +11,21 @@ int calculateDistance(const std::string& text) {
 void Toolbar::draw(Focus currentFocus) {
     bool isFocused = currentFocus == Focus::Toolbar;
     
-    unsigned short int currentDistance = 1;
+    unsigned short int currentDistance = 2;
     unsigned short int i = 0;
     for (const auto& menu : menus) {
         moveCursor(currentDistance, 2);
         if (isFocused && selectedButton == i) {
             std::cout << "\033[7m"; // inverse color
         }
-            std::cout << "[" << menu.caption << "] ";
+            std::cout << "[" << menu.caption << "]";
             currentDistance += calculateDistance(menu.caption);
             std::cout << "\033[27m"; // reset color
+            std::cout << " ";
         i++;
     }
-    moveCursor(1, getTerminalSize().x - 1);
+    moveCursor(2, getTerminalSize().y - 1);
     std::cout << "Current mode: " << getCurrentMode(currentFocus);
-    std::cout << std::endl;
 }
 
 void Toolbar::initMenu() {

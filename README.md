@@ -1,7 +1,7 @@
 
 # TermDRAW
 
-TODO: Add some fancy screenshots from my Linux terminal
+![TermDRAW Preview](screenshot.png)
 
 ## Description
 A lightweight and easy to use 2D CAD-like drawing tool in terminal.

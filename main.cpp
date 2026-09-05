@@ -77,9 +77,9 @@ void drawUi() {
 
     moveCursor(8, 9);
     std::cout << "Welcome to the TermDRAW! Easy-to-use terminal drawing tool";
-    moveCursor(8, 12);
+    moveCursor(8, 11);
     std::cout << "Made by Ilnur Sultanov (c) 2026";
-    moveCursor(8, 15);
+    moveCursor(8, 13);
     std::cout << "Press q key to quit the program";
 }
 
