@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "Panel.hpp"
 
 struct MenuItem {
     std::string caption;
@@ -9,6 +10,6 @@ struct MenuItem {
 };
 
 struct MenuSection {
-    std::string title;
+    std::string caption;
     std::vector<MenuItem> items;
 };

@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/ioctl.h>
 
+#include "src/Focus.hpp"
 #include "src/MenuItem.hpp"
 #include "src/Panel.hpp"
 #include "src/Screen.hpp"
@@ -28,34 +29,9 @@ std::string projectName;
 bool running = true;
 struct termios originalTermios;
 
-std::vector<MenuSection> menus;
-int activeMenu = -1;
+Focus currentFocus = Focus::Canvas;
 
 void initMenu() {
-    MenuSection fileMenu;
-    fileMenu.title = "File";
-    fileMenu.items.push_back({"New file", nullptr});
-    fileMenu.items.push_back({"Open file", nullptr});
-    fileMenu.items.push_back({"Save file", nullptr});
-    fileMenu.items.push_back({"Exit", nullptr});
-
-    MenuSection editMenu;
-    editMenu.title = "Edit";
-    // TODO ADD ITEMS
-
-    MenuSection optionMenu;
-    optionMenu.title = "Option";
-    // TODO ADD ITEMS
-
-    MenuSection helpMenu;
-    helpMenu.title = "Help";
-    helpMenu.items.push_back({"About", nullptr});
-    helpMenu.items.push_back({"Settings", nullptr});
-
-    menus.push_back(fileMenu);
-    menus.push_back(editMenu);
-    menus.push_back(optionMenu);
-    menus.push_back(helpMenu);
 }
 
 void init()
@@ -106,6 +82,24 @@ int main()
     init();
 
     while (running) {
+        int key = std::cin.get();
+        if (key == KEY_F10 || key == KEY_TAB) {
+            toggleFocus();
+        } else {
+            switch (currentFocus) {
+                case Focus::Toolbar:
+                    if (!toolbar.handleInput(key)) {
+                    }
+                    break;
+                case Focus::MenuPopup:
+                    break;
+                case Focus::Canvas:
+                    break;
+                
+                default:
+                    break;
+            }
+        }
         drawUi();
 
         moveCursor(8, 9);

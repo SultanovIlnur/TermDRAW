@@ -14,5 +14,11 @@ class Toolbar {
         
         void draw();
 
-        void addMenu(const MenuSection& section);
+        void initMenu();
+
+        bool handleInput(int key);
+
+    private:
+        std::vector<MenuSection> menus;
+        int activeMenu = -1;
 };
