@@ -84,19 +84,10 @@ void drawUi() {
 }
 
 void toggleFocus() {
-    switch (currentFocus) {
-        case Focus::None:
-            currentFocus = Focus::Toolbar;
-            break;
-        case Focus::Toolbar:
-            currentFocus = Focus::MenuPopup;
-            break;
-        case Focus::MenuPopup:
-            currentFocus = Focus::Canvas;
-            break;
-        case Focus::Canvas:
-            currentFocus = Focus::None;
-            break;
+    if (currentFocus == Focus::Canvas) {
+        currentFocus = Focus::Toolbar;
+    } else {
+        currentFocus = Focus::Canvas;
     }
 }
 
@@ -111,7 +102,7 @@ int main()
         } else {
             switch (currentFocus) {
                 case Focus::Toolbar:
-                    if (!toolbar.handleInput(readKey())) {
+                    if (!toolbar.handleInput(key)) {
                     }
                     break;
                 case Focus::MenuPopup:

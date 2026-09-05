@@ -1,7 +1,10 @@
 #include "Input.hpp"
 
 SpecialKey readKey() {
-    int c = std::cin.get();
+    char c;
+    if (read(STDIN_FILENO, &c, 1) <= 0) {
+        return SpecialKey::KEY_UNKNOWN;
+    }
     switch (c) {
         case '\n':
             return SpecialKey::KEY_ENTER;
