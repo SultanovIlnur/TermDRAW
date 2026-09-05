@@ -1,6 +1,6 @@
 #include "Toolbar.hpp"
 
-Toolbar::Toolbar() : activeMenu(false), selectedButton(0) {
+Toolbar::Toolbar() : activeMenu(false), activeSubMenu(false), selectedButton(0), selectedSubMenuButton(0) {
     initMenu();
 }
 
@@ -13,7 +13,12 @@ void Toolbar::draw(Focus currentFocus) {
     
     unsigned short int currentDistance = 2;
     unsigned short int i = 0;
+    int selectedX = 2;
     for (const auto& menu : menus) {
+        if (selectedButton == i) {
+            selectedX = currentDistance;
+        }
+
         moveCursor(currentDistance, 2);
         if (isFocused && selectedButton == i) {
             std::cout << "\033[7m"; // inverse color
@@ -26,6 +31,21 @@ void Toolbar::draw(Focus currentFocus) {
     }
     moveCursor(3, getTerminalSize().y - 1);
     std::cout << "Current mode: " << getCurrentMode(currentFocus);
+
+    if (activeSubMenu) {
+        const auto& currentSection = menus[selectedButton];
+        
+        int menuWidth = 16; // Ширина выпадающей рамки
+        int menuHeight = static_cast<int>(currentSection.items.size()) + 1; // Высота с учётом рамок
+        
+        Panel popupPanel(
+            {selectedX, 3}, 
+            {selectedX + menuWidth, 3 + menuHeight}, 
+            "\033[93;44m", 
+            1
+        );
+        popupPanel.draw();
+    }
 }
 
 void Toolbar::initMenu() {
@@ -57,6 +77,9 @@ void Toolbar::initMenu() {
 
 bool Toolbar::handleInput(SpecialKey key) {
     switch (key) {
+        case SpecialKey::KEY_ENTER:
+            activeSubMenu = !activeSubMenu;
+            break;
         case SpecialKey::ARROW_KEY_RIGHT:
             if (selectedButton < menus.size() - 1) {
                 selectedButton++;

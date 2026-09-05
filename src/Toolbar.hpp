@@ -23,5 +23,7 @@ class Toolbar {
     private:
         std::vector<MenuSection> menus;
         bool activeMenu = false;
+        bool activeSubMenu = false;
         int selectedButton = 0;
+        int selectedSubMenuButton = 0;
 };
