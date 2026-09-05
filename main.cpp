@@ -61,16 +61,10 @@ void shutdown()
     std::cout << MOVE_HOME;
 }
 
-Position2D getTerminalSize() {
-    struct winsize w;
-    ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-    return {w.ws_col, w.ws_row};
-}
-
 void drawUi() {
     Panel mainWindow {{1, 1}, getTerminalSize(), DOS_COLOR, 0};
     mainWindow.draw();
-    toolbar.draw(currentFocus == Focus::Toolbar);
+    toolbar.draw(currentFocus);
 
     moveCursor((getTerminalSize().x - 1 - DEFAULT_PROJECT_NAME.length() - 2) / 2, 1);
     std::cout << "[ TermDRAW - ";

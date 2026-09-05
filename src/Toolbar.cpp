@@ -8,7 +8,9 @@ int calculateDistance(const std::string& text) {
     return text.length() + 3;
 }
 
-void Toolbar::draw(bool isFocused) {
+void Toolbar::draw(Focus currentFocus) {
+    bool isFocused = currentFocus == Focus::Toolbar;
+    
     unsigned short int currentDistance = 1;
     unsigned short int i = 0;
     for (const auto& menu : menus) {
@@ -21,6 +23,8 @@ void Toolbar::draw(bool isFocused) {
             std::cout << "\033[27m"; // reset color
         i++;
     }
+    moveCursor(1, getTerminalSize().x - 1);
+    std::cout << "Current mode: " << getCurrentMode(currentFocus);
     std::cout << std::endl;
 }
 

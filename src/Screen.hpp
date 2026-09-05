@@ -1,6 +1,12 @@
 #pragma once
 
-#include <string>
 #include <iostream>
+#include <termios.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+
+#include "../Types.hpp"
 
 void moveCursor(int x, int y);
+
+Position2D getTerminalSize();

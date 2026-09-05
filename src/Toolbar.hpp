@@ -6,13 +6,14 @@
 
 #include "MenuItem.hpp"
 #include "ToolbarButton.hpp"
+#include "Focus.hpp"
 
 class Toolbar {
     public: 
         Toolbar();
         std::vector<ToolbarButton> buttons;
         
-        void draw(bool isFocused);
+        void draw(Focus currentFocus);
 
         void initMenu();
 
