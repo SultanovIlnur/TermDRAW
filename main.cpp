@@ -23,6 +23,9 @@ const std::string SHOW_CURSOR  = "\033[?25h";
 
 const std::string DOS_COLOR = "\033[93;44m";
 
+const int KEY_F10 = 0x1B5B31307E;
+const int KEY_TAB = 9;
+
 const std::string DEFAULT_PROJECT_NAME = "Unnamed project";
 
 std::string projectName;
@@ -30,6 +33,7 @@ bool running = true;
 struct termios originalTermios;
 
 Focus currentFocus = Focus::Canvas;
+Toolbar toolbar = Toolbar();
 
 void initMenu() {
 }
@@ -64,9 +68,9 @@ Position2D getTerminalSize() {
 }
 
 void drawUi() {
-    // Main DOS window
     Panel mainWindow {{1, 1}, getTerminalSize(), DOS_COLOR, 0};
     mainWindow.draw();
+    toolbar.draw();
 
     moveCursor((getTerminalSize().x - 1 - DEFAULT_PROJECT_NAME.length() - 2) / 2, 1);
     std::cout << "[ TermDRAW - ";
@@ -77,9 +81,27 @@ void drawUi() {
     std::cout << projectName << " ]";
 }
 
+void toggleFocus() {
+    switch (currentFocus) {
+        case Focus::None:
+            currentFocus = Focus::Toolbar;
+            break;
+        case Focus::Toolbar:
+            currentFocus = Focus::MenuPopup;
+            break;
+        case Focus::MenuPopup:
+            currentFocus = Focus::Canvas;
+            break;
+        case Focus::Canvas:
+            currentFocus = Focus::None;
+            break;
+    }
+}
+
 int main()
 {
     init();
+    drawUi();
 
     while (running) {
         int key = std::cin.get();
@@ -100,7 +122,6 @@ int main()
                     break;
             }
         }
-        drawUi();
 
         moveCursor(8, 9);
         std::cout << "Welcome to the TermDRAW! Easy-to-use terminal drawing tool";

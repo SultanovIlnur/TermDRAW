@@ -1,9 +1,11 @@
 #include "Toolbar.hpp"
 
-Toolbar::Toolbar() : activeMenu(-1) {}
+Toolbar::Toolbar() : activeMenu(-1) {
+    initMenu();
+}
 
-int calculateDistance(const std::string text) {
-    return text.length() + 2;
+int calculateDistance(const std::string& text) {
+    return text.length() + 3;
 }
 
 void Toolbar::draw() {
