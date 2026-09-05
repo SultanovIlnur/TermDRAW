@@ -3,14 +3,14 @@
 std::string getCurrentMode(Focus currentFocus) {
         switch (currentFocus) {
                 case Focus::None:
-                return "None";
+                return "NONE";
                 case Focus::Toolbar:
-                return "Toolbar";
+                return "TOOLBAR";
                 case Focus::MenuPopup:
-                return "MenuPopup";
+                return "MENU POPUP";
                 case Focus::Canvas:
-                return "Canvas";
+                return "CANVAS";
                 default:
-                return "Unknown";
+                return "UNKNOWN";
         }
 }

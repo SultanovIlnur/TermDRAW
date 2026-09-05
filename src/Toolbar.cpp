@@ -24,7 +24,7 @@ void Toolbar::draw(Focus currentFocus) {
             std::cout << " ";
         i++;
     }
-    moveCursor(2, getTerminalSize().y - 1);
+    moveCursor(3, getTerminalSize().y - 1);
     std::cout << "Current mode: " << getCurrentMode(currentFocus);
 }
 
