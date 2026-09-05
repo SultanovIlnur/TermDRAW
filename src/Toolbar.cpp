@@ -2,10 +2,16 @@
 
 Toolbar::Toolbar() : activeMenu(-1) {}
 
+int calculateDistance(const std::string text) {
+    return text.length() + 2;
+}
+
 void Toolbar::draw() {
+    int currentDistance = 1;
     for (const auto& menu : menus) {
-        moveCursor(1, 1);
+        moveCursor(currentDistance, 1);
         std::cout << "[" << menu.caption << "] ";
+        currentDistance += calculateDistance(menu.caption);
     }
     std::cout << std::endl;
 }
