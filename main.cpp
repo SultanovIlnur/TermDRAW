@@ -105,13 +105,13 @@ int main()
     init();
     while (running) {
         drawUi();
-        int key = std::cin.get();
-        if (key == KEY_TAB) {
+        SpecialKey key = readKey();
+        if (key == SpecialKey::KEY_TAB) {
             toggleFocus();
         } else {
             switch (currentFocus) {
                 case Focus::Toolbar:
-                    if (!toolbar.handleInput(key)) {
+                    if (!toolbar.handleInput(readKey())) {
                     }
                     break;
                 case Focus::MenuPopup:
@@ -125,7 +125,7 @@ int main()
         }
 
         std::cout.flush();
-        if (key == KEY_Q) {
+        if (key == SpecialKey::KEY_Q) {
             running = false;
         }
     }

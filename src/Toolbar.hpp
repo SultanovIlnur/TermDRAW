@@ -7,6 +7,7 @@
 #include "MenuItem.hpp"
 #include "ToolbarButton.hpp"
 #include "Focus.hpp"
+#include "Input.hpp"
 
 class Toolbar {
     public: 
@@ -17,7 +18,7 @@ class Toolbar {
 
         void initMenu();
 
-        bool handleInput(int key);
+        bool handleInput(SpecialKey key);
 
     private:
         std::vector<MenuSection> menus;

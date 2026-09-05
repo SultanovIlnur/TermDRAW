@@ -55,8 +55,18 @@ void Toolbar::initMenu() {
     menus.push_back(helpMenu);
 }
 
-bool Toolbar::handleInput(int key) {
-    // TODO
-
-    return false;
+bool Toolbar::handleInput(SpecialKey key) {
+    switch (key) {
+        case SpecialKey::ARROW_KEY_RIGHT:
+            if (selectedButton < menus.size() - 1) {
+                selectedButton++;
+            }
+            break;
+        case SpecialKey::ARROW_KEY_LEFT:
+            if (selectedButton > 0) {
+                selectedButton--;
+            }
+            break;
+    }
+    return true;
 }
