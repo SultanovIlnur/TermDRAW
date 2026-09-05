@@ -39,24 +39,31 @@ struct ToolbarButton {
 struct Toolbar {
 };
 
-
-
 void initMenu() {
-    menus.push_back({
-        "File",
-        {
-            {"New file",  nullptr},
-            {"Open file", nullptr},
-            {"Save file", nullptr},
-            {"Exit",      nullptr}
-        }
-    });
-    menus.push_back({
-        "Help",
-        {
-            {"About", nullptr}
-        }
-    });
+    MenuSection fileMenu;
+    fileMenu.title = "File";
+    fileMenu.items.push_back({"New file", nullptr});
+    fileMenu.items.push_back({"Open file", nullptr});
+    fileMenu.items.push_back({"Save file", nullptr});
+    fileMenu.items.push_back({"Exit", nullptr});
+
+    MenuSection editMenu;
+    editMenu.title = "Edit";
+    // TODO ADD ITEMS
+
+    MenuSection optionMenu;
+    optionMenu.title = "Option";
+    // TODO ADD ITEMS
+
+    MenuSection helpMenu;
+    helpMenu.title = "Help";
+    helpMenu.items.push_back({"About", nullptr});
+    helpMenu.items.push_back({"Settings", nullptr});
+
+    menus.push_back(fileMenu);
+    menus.push_back(editMenu);
+    menus.push_back(optionMenu);
+    menus.push_back(helpMenu);
 }
 
 void init()
@@ -155,7 +162,7 @@ int main()
 
         std::cout.flush();
 
-        char c = cin.get();
+        char c = std::cin.get();
         if (c == 'q') {
             running = false;
         }
@@ -164,31 +171,4 @@ int main()
     shutdown();
 
     return 0;
-}
-
-void initMenu() {
-    MenuSection fileMenu;
-    fileMenu.title = "File";
-    fileMenu.items.push_back({"New file", nullptr});
-    fileMenu.items.push_back({"Open file", nullptr});
-    fileMenu.items.push_back({"Save file", nullptr});
-    fileMenu.items.push_back({"Exit", nullptr});
-
-    MenuSection editMenu;
-    editMenu.title = "Edit";
-    // TODO ADD ITEMS
-
-    MenuSection optionMenu;
-    optionMenu.title = "Option";
-    // TODO ADD ITEMS
-
-    MenuSection helpMenu;
-    helpMenu.title = "Help";
-    helpMenu.items.push_back({"About", actionAbout});
-    helpMenu.items.push_back({"Settings", nullptr});
-
-    menus.push_back(fileMenu);
-    menus.push_back(editMenu);
-    menus.push_back(optionMenu);
-    menus.push_back(helpMenu);
 }
