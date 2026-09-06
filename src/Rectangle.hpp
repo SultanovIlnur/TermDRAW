@@ -5,7 +5,7 @@
 
 class Rectangle : public Shape {
     public:
-        Rectangle(Position2D pos, int width, int height)
+        Rectangle(Position2D pos, int width, int height);
 
         void draw() const override;
 
