@@ -46,8 +46,12 @@ void Toolbar::draw(Focus currentFocus) {
         );
         popupPanel.draw();
         for (const auto& item : currentSection.items) {
+            if (selectedSubMenuButton == &item - &currentSection.items[0]) {
+                std::cout << "\033[7m"; // inverse color
+            }
             moveCursor(selectedX + 1, 4 + &item - &currentSection.items[0]);
             std::cout << item.caption;
+            std::cout << "\033[27m"; // reset color
         }
     }
 }
