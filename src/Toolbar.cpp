@@ -87,7 +87,10 @@ bool Toolbar::handleInput(SpecialKey key) {
     switch (key) {
         case SpecialKey::KEY_ENTER:
             activeSubMenu = !activeSubMenu;
-            if (activeSubMenu) {
+            if (!activeSubMenu) {
+                activeSubMenu = false;
+                selectedSubMenuButton = 0;
+            } else {
                 const auto& currentSection = menus[selectedButton];
                 if (selectedSubMenuButton < currentSection.items.size()) {
                     auto action = currentSection.items[selectedSubMenuButton].action;
@@ -95,6 +98,7 @@ bool Toolbar::handleInput(SpecialKey key) {
                         action();
                     }
                 }
+                activeSubMenu = false;
             }
             break;
         case SpecialKey::ARROW_KEY_RIGHT:
@@ -122,6 +126,13 @@ bool Toolbar::handleInput(SpecialKey key) {
                 }
             }
             break;
+        case SpecialKey::KEY_ESC:
+            if (activeSubMenu) {
+                activeSubMenu = false;
+                selectedSubMenuButton = 0;
+            } else {
+                activeMenu = false;
+            }
     }
     return true;
 }
