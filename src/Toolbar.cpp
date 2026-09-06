@@ -11,8 +11,8 @@ int calculateDistance(const std::string& text) {
 void Toolbar::draw(Focus currentFocus) {
     bool isFocused = currentFocus == Focus::Toolbar;
     
-    unsigned short int currentDistance = 2;
-    unsigned short int i = 0;
+    int currentDistance = 2;
+    int i = 0;
     int selectedX = 2;
     for (const auto& menu : menus) {
         if (selectedButton == i) {
@@ -32,6 +32,7 @@ void Toolbar::draw(Focus currentFocus) {
     moveCursor(3, getTerminalSize().y - 1);
     Position2D cur = canvas.getCursor();
     std::cout << "Current mode: " << getCurrentMode(currentFocus);
+    std::cout << " | X: " << cur.x << "  Y: " << cur.y << "  ";
 
     if (activeSubMenu) {
         const auto& currentSection = menus[selectedButton];

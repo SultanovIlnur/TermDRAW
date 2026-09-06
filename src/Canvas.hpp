@@ -17,7 +17,7 @@ class Canvas {
         // moving the painting cursor on ui
         Position2D getCursor() const;
         void moveCursorBy(int dx, int dy);
-        void handleInput(SpecialKey key);
+        bool handleInput(SpecialKey key);
 
     private:
         std::vector<std::unique_ptr<Shape>> shapes;

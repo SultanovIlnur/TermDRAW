@@ -21,7 +21,7 @@ const std::string DEFAULT_PROJECT_NAME = "Unnamed project";
 std::string projectName;
 bool running = true;
 
-Focus currentFocus = Focus::Canvas;
+Focus currentFocus = Focus::Dialog;
 Canvas canvas;
 Toolbar toolbar = Toolbar(canvas);
 
