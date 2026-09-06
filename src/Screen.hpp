@@ -10,3 +10,7 @@
 void moveCursor(int x, int y);
 
 Position2D getTerminalSize();
+
+void init();
+
+void shutdown();

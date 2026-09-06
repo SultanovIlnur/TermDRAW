@@ -15,51 +15,13 @@
 
 // 02 Sept 2026: This is only a boilerplate code that I'm planning to rework later
 
-const std::string CLEAR_SCREEN = "\033[2J";
-const std::string RESET        = "\033[0m";
-const std::string MOVE_HOME    = "\033[H";
-const std::string HIDE_CURSOR  = "\033[?25l";
-const std::string SHOW_CURSOR  = "\033[?25h";
-
-const std::string DOS_COLOR = "\033[93;44m";
-
-const int KEY_TAB = 9;
-const int KEY_Q = 113;
-
 const std::string DEFAULT_PROJECT_NAME = "Unnamed project";
 
 std::string projectName;
 bool running = true;
-struct termios originalTermios;
 
 Focus currentFocus = Focus::Canvas;
 Toolbar toolbar = Toolbar();
-
-void initMenu() {
-}
-
-void init()
-{
-    initMenu();
-    tcgetattr(STDIN_FILENO, &originalTermios);
-    struct termios raw = originalTermios;
-    raw.c_lflag &= ~(ECHO | ICANON);
-    tcsetattr(STDIN_FILENO, TCSANOW, &raw);
-    // settings dos colors
-    std::cout << DOS_COLOR;
-    std::cout << CLEAR_SCREEN;
-    std::cout << MOVE_HOME;
-    std::cout << HIDE_CURSOR;
-}
-
-void shutdown()
-{
-    tcsetattr(STDIN_FILENO, TCSANOW, &originalTermios);
-    std::cout << RESET;
-    std::cout << SHOW_CURSOR;
-    std::cout << CLEAR_SCREEN;
-    std::cout << MOVE_HOME;
-}
 
 void drawUi() {
     Panel mainWindow {{1, 1}, getTerminalSize(), DOS_COLOR, 0};

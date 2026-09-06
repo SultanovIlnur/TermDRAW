@@ -59,7 +59,7 @@ void Toolbar::draw(Focus currentFocus) {
 void Toolbar::initMenu() {
     MenuSection fileMenu;
     fileMenu.caption = "File";
-    fileMenu.items.push_back({"New file", nullptr});
+    fileMenu.items.push_back({"New file", actionShutdown});
     fileMenu.items.push_back({"Open file", nullptr});
     fileMenu.items.push_back({"Save file", nullptr});
     fileMenu.items.push_back({"Exit", nullptr});
@@ -87,6 +87,15 @@ bool Toolbar::handleInput(SpecialKey key) {
     switch (key) {
         case SpecialKey::KEY_ENTER:
             activeSubMenu = !activeSubMenu;
+            if (activeSubMenu) {
+                const auto& currentSection = menus[selectedButton];
+                if (selectedSubMenuButton < currentSection.items.size()) {
+                    auto action = currentSection.items[selectedSubMenuButton].action;
+                    if (action) {
+                        action();
+                    }
+                }
+            }
             break;
         case SpecialKey::ARROW_KEY_RIGHT:
             if (selectedButton < menus.size() - 1) {
