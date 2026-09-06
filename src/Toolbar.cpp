@@ -1,6 +1,6 @@
 #include "Toolbar.hpp"
 
-Toolbar::Toolbar() : activeMenu(false), activeSubMenu(false), selectedButton(0), selectedSubMenuButton(0) {
+Toolbar::Toolbar(Canvas& canvas) : canvas(canvas), activeMenu(false), activeSubMenu(false), selectedButton(0), selectedSubMenuButton(0) {
     initMenu();
 }
 
@@ -30,6 +30,7 @@ void Toolbar::draw(Focus currentFocus) {
         i++;
     }
     moveCursor(3, getTerminalSize().y - 1);
+    Position2D cur = canvas.getCursor();
     std::cout << "Current mode: " << getCurrentMode(currentFocus);
 
     if (activeSubMenu) {
@@ -59,7 +60,7 @@ void Toolbar::draw(Focus currentFocus) {
 void Toolbar::initMenu() {
     MenuSection fileMenu;
     fileMenu.caption = "File";
-    fileMenu.items.push_back({"New file", nullptr});
+    fileMenu.items.push_back({"New file", [this]() { canvas.clear(); }});
     fileMenu.items.push_back({"Open file", nullptr});
     fileMenu.items.push_back({"Save file", nullptr});
     fileMenu.items.push_back({"Exit", actionShutdown});

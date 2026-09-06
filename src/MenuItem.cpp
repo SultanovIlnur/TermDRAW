@@ -1,7 +1,7 @@
 #include "MenuItem.hpp"
 
-
 void actionShutdown() {
+    shutdown();
     exit(0);
 }
 

@@ -10,6 +10,7 @@
 #include "src/Screen.hpp"
 #include "src/Toolbar.hpp"
 #include "src/ToolbarButton.hpp"
+#include "src/Canvas.hpp"
 
 // Ilnur Sultanov (C) 2026
 
@@ -21,7 +22,8 @@ std::string projectName;
 bool running = true;
 
 Focus currentFocus = Focus::Canvas;
-Toolbar toolbar = Toolbar();
+Canvas canvas;
+Toolbar toolbar = Toolbar(canvas);
 
 void drawUi() {
     Panel mainWindow {{1, 1}, getTerminalSize(), DOS_COLOR, 0};
@@ -43,6 +45,8 @@ void drawUi() {
     std::cout << "Made by Ilnur Sultanov (c) 2026";
     moveCursor(8, 13);
     std::cout << "Press q key to quit the program";
+
+    canvas.draw();
 }
 
 void toggleFocus() {
@@ -71,6 +75,7 @@ int main()
                 case Focus::MenuPopup:
                     break;
                 case Focus::Canvas:
+                    canvas.handleInput(key);
                     break;
                 
                 default:

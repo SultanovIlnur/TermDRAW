@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 
+#include "Canvas.hpp"
 #include "MenuItem.hpp"
 #include "ToolbarButton.hpp"
 #include "Focus.hpp"
@@ -11,7 +12,7 @@
 
 class Toolbar {
     public: 
-        Toolbar();
+        Toolbar(Canvas& canvas);
         std::vector<ToolbarButton> buttons;
         
         void draw(Focus currentFocus);
@@ -26,4 +27,5 @@ class Toolbar {
         bool activeSubMenu = false;
         int selectedButton = 0;
         int selectedSubMenuButton = 0;
+        Canvas& canvas;
 };
