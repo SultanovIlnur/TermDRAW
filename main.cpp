@@ -34,7 +34,6 @@ bool running = true;
 void drawUi() {
     Panel mainWindow {{1, 1}, getTerminalSize(), DOS_COLOR, 0};
     mainWindow.draw();
-    toolbar.draw(currentFocus);
 
     moveCursor((getTerminalSize().x - 1 - DEFAULT_PROJECT_NAME.length() - 2) / 2, 1);
     std::cout << "[ TermDRAW - ";
@@ -46,6 +45,7 @@ void drawUi() {
 
     canvas.draw();
     toolbox.draw(currentFocus == Focus::Toolbox);
+    toolbar.draw(currentFocus);
     if (activeDialog) {
         activeDialog->draw();
     }

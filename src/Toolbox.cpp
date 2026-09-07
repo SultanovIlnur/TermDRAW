@@ -15,7 +15,6 @@ void Toolbox::draw(bool isFocused) const {
     panel.draw();
     for (size_t i = 0; i < tools.size(); ++i) {
         moveCursor(3, 4 + static_cast<int>(i));
-        // Если инструмент выбран — подсвечиваем инверсией
         if (static_cast<int>(i) == selectedIndex) {
             std::cout << "\033[7m";
         }

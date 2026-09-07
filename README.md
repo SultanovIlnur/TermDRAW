@@ -1,7 +1,8 @@
 
 # TermDRAW
 
-![TermDRAW Preview](screenshot.png)
+![TermDRAW Preview](screenshot1.png)
+![TermDRAW Preview](screenshot2.png)
 
 ## Description
 A lightweight and easy to use 2D CAD-like drawing tool in terminal.
