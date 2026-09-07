@@ -15,10 +15,19 @@ void Canvas::clear() {
 }
 
 void Canvas::draw() const {
+    Position2D term = getTerminalSize();
+    // Сетка точек в стиле VB6
+    std::cout << "\033[90;44m";
+    for (int y = 3; y < term.y - 1; y += 2) {
+        for (int x = 10; x < term.x - 1; x += 4) {
+            moveCursor(x, y);
+            std::cout << "·";
+        }
+    }
+    std::cout << DOS_COLOR;
     for (const auto& shape : shapes) {
         shape->draw();
     }
-
     moveCursor(cursorPos.x, cursorPos.y);
     std::cout << "\033[7m \033[27m"; // cursor of symbol represented as a reversed color square
 }
