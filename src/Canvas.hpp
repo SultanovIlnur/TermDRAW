@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 #include "../Types.hpp"
 #include "Input.hpp"
 #include "Shape.hpp"
@@ -24,6 +25,9 @@ class Canvas {
         void setColorIndex(int index);
         std::string getCurrentColor() const;
         std::string getCurrentColorName() const;
+
+        bool saveToFile(const std::string& filename) const;
+        bool loadFromFile(const std::string& filename);
 
     private:
         std::vector<std::unique_ptr<Shape>> shapes;

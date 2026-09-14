@@ -29,3 +29,8 @@ void Rectangle::draw() const {
     std::cout << "┘";
     std::cout << DOS_COLOR;
 }
+
+std::string Rectangle::serialize() const {
+    return "RECT " + std::to_string(pos.x) + " " + std::to_string(pos.y) + " " +
+           std::to_string(width) + " " + std::to_string(height) + " " + color;
+}

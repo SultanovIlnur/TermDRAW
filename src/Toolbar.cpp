@@ -66,13 +66,12 @@ void Toolbar::initMenu() {
     MenuSection fileMenu;
     fileMenu.caption = "File";
     fileMenu.items.push_back({"New file", [this]() { canvas.clear(); }});
-    fileMenu.items.push_back({"Open file", nullptr});
-    fileMenu.items.push_back({"Save file", nullptr});
+    fileMenu.items.push_back({"Open file", [this]() { canvas.loadFromFile("drawing.td"); }});
+    fileMenu.items.push_back({"Save file", [this]() { canvas.saveToFile("drawing.td"); }});
     fileMenu.items.push_back({"Exit", actionShutdown});
 
     MenuSection editMenu;
     editMenu.caption = "Edit";
-    // TODO ADD ITEMS
 
     MenuSection optionMenu;
     optionMenu.caption = "Options";

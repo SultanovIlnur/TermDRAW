@@ -6,6 +6,7 @@
 #include <memory>
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 
 Canvas::Canvas()
     : cursorPos{10, 5}, startPos{10, 5}, isDrawing(false),
@@ -81,6 +82,44 @@ std::string Canvas::getCurrentColor() const {
 
 std::string Canvas::getCurrentColorName() const {
     return PALETTE[currentColorIndex].name;
+}
+
+bool Canvas::saveToFile(const std::string& filename) const {
+    std::ofstream out(filename);
+    if (!out.is_open()) {
+        return false;
+    }
+    for (const auto& shape : shapes) {
+        out << shape->serialize() << "\n";
+    }
+    return true;
+}
+
+bool Canvas::loadFromFile(const std::string& filename) {
+    std::ifstream in(filename);
+    if (!in.is_open()) {
+        return false;
+    }
+    std::vector<std::unique_ptr<Shape>> loadedShapes;
+    std::string type;
+    while (in >> type) {
+        if (type == "RECT") {
+            int x, y, w, h;
+            std::string col;
+            if (in >> x >> y >> w >> h >> col) {
+                loadedShapes.push_back(std::make_unique<Rectangle>(Position2D{x, y}, w, h, col));
+            }
+        } else if (type == "LINE") {
+            int x0, y0, x1, y1;
+            std::string col;
+            if (in >> x0 >> y0 >> x1 >> y1 >> col) {
+                loadedShapes.push_back(std::make_unique<Line>(Position2D{x0, y0}, Position2D{x1, y1}, col));
+            }
+        }
+    }
+    shapes = std::move(loadedShapes);
+    isDrawing = false;
+    return true;
 }
 
 bool Canvas::handleInput(SpecialKey key, Tool currentTool) {

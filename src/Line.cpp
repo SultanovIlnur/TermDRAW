@@ -57,3 +57,8 @@ void Line::draw() const {
     }
     std::cout << DOS_COLOR;
 }
+
+std::string Line::serialize() const {
+    return "LINE " + std::to_string(start.x) + " " + std::to_string(start.y) + " " +
+           std::to_string(end.x) + " " + std::to_string(end.y) + " " + color;
+}
