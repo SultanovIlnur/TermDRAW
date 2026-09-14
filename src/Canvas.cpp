@@ -1,6 +1,7 @@
 #include "Canvas.hpp"
 #include "Input.hpp"
 #include "Rectangle.hpp"
+#include "Line.hpp"
 #include "Screen.hpp"
 #include <memory>
 
@@ -41,7 +42,7 @@ void Canvas::moveCursorBy(int dx, int dy) {
     cursorPos.y += dy;
 }
 
-bool Canvas::handleInput(SpecialKey key) {
+bool Canvas::handleInput(SpecialKey key, Tool currentTool) {
     switch (key) {
         case SpecialKey::ARROW_KEY_UP:
             moveCursorBy(0, -1);
@@ -57,7 +58,16 @@ bool Canvas::handleInput(SpecialKey key) {
             return true;
 
         case SpecialKey::KEY_ENTER:
-            addShape(std::make_unique<Rectangle>(cursorPos, 12, 6));
+            if (currentTool == Tool::Rectangle) {
+                addShape(std::make_unique<Rectangle>(cursorPos, 12, 6));
+            }
+            if (currentTool == Tool::Line) {
+                // todo write lines
+                addShape(std::make_unique<Line>(cursorPos, Position2D{cursorPos.x + 12, cursorPos.y + 5}));
+            }
+            if (currentTool == Tool::Circle) {
+                // todo write circles
+            }
             return true;
 
         default:

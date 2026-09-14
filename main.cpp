@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "src/Focus.hpp"
+#include "src/Input.hpp"
 #include "src/MenuItem.hpp"
 #include "src/Panel.hpp"
 #include "src/Screen.hpp"
@@ -104,10 +105,13 @@ int main()
                     toolbar.handleInput(key);
                     break;
                 case Focus::Canvas:
-                    canvas.handleInput(key);
+                    canvas.handleInput(key, toolbox.getSelectedTool());
                     break;
                 case Focus::Toolbox:
                     toolbox.handleInput(key);
+                    if (key == SpecialKey::KEY_ENTER) {
+                        currentFocus = Focus::Canvas;
+                    }
                     break;
                 default:
                     break;
