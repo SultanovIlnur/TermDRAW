@@ -4,8 +4,10 @@
 #include "Line.hpp"
 #include "Screen.hpp"
 #include <memory>
+#include <algorithm>
+#include <cmath>
 
-Canvas::Canvas() : cursorPos{10,5} {} // default cursor position
+Canvas::Canvas() : cursorPos{10, 5}, startPos{10, 5}, isDrawing(false), currentDrawingTool(Tool::Rectangle) {}
 
 void Canvas::addShape(std::unique_ptr<Shape> shape) {
     shapes.push_back(std::move(shape));
@@ -13,11 +15,11 @@ void Canvas::addShape(std::unique_ptr<Shape> shape) {
 
 void Canvas::clear() {
     shapes.clear();
+    isDrawing = false;
 }
 
 void Canvas::draw() const {
     Position2D term = getTerminalSize();
-    // Сетка точек в стиле VB6
     std::cout << "\033[90;44m";
     for (int y = 3; y < term.y - 1; y += 2) {
         for (int x = 10; x < term.x - 1; x += 4) {
@@ -29,8 +31,23 @@ void Canvas::draw() const {
     for (const auto& shape : shapes) {
         shape->draw();
     }
+
+    if (isDrawing) {
+        if (currentDrawingTool == Tool::Rectangle) {
+            int left = std::min(startPos.x, cursorPos.x);
+            int top = std::min(startPos.y, cursorPos.y);
+            int width = std::max(2, std::abs(cursorPos.x - startPos.x) + 1);
+            int height = std::max(2, std::abs(cursorPos.y - startPos.y) + 1);
+            Rectangle preview({left, top}, width, height);
+            preview.draw();
+        } else if (currentDrawingTool == Tool::Line) {
+            Line preview(startPos, cursorPos);
+            preview.draw();
+        }
+    }
+
     moveCursor(cursorPos.x, cursorPos.y);
-    std::cout << "\033[7m \033[27m"; // cursor of symbol represented as a reversed color square
+    std::cout << "\033[7m \033[27m";
 }
 
 Position2D Canvas::getCursor() const {
@@ -40,6 +57,10 @@ Position2D Canvas::getCursor() const {
 void Canvas::moveCursorBy(int dx, int dy) {
     cursorPos.x += dx;
     cursorPos.y += dy;
+}
+
+bool Canvas::getIsDrawing() const {
+    return isDrawing;
 }
 
 bool Canvas::handleInput(SpecialKey key, Tool currentTool) {
@@ -58,17 +79,30 @@ bool Canvas::handleInput(SpecialKey key, Tool currentTool) {
             return true;
 
         case SpecialKey::KEY_ENTER:
-            if (currentTool == Tool::Rectangle) {
-                addShape(std::make_unique<Rectangle>(cursorPos, 12, 6));
-            }
-            if (currentTool == Tool::Line) {
-                // todo write lines
-                addShape(std::make_unique<Line>(cursorPos, Position2D{cursorPos.x + 12, cursorPos.y + 5}));
-            }
-            if (currentTool == Tool::Circle) {
-                // todo write circles
+            if (!isDrawing) {
+                isDrawing = true;
+                startPos = cursorPos;
+                currentDrawingTool = currentTool;
+            } else {
+                if (currentDrawingTool == Tool::Rectangle) {
+                    int left = std::min(startPos.x, cursorPos.x);
+                    int top = std::min(startPos.y, cursorPos.y);
+                    int width = std::max(2, std::abs(cursorPos.x - startPos.x) + 1);
+                    int height = std::max(2, std::abs(cursorPos.y - startPos.y) + 1);
+                    addShape(std::make_unique<Rectangle>(Position2D{left, top}, width, height));
+                } else if (currentDrawingTool == Tool::Line) {
+                    addShape(std::make_unique<Line>(startPos, cursorPos));
+                }
+                isDrawing = false;
             }
             return true;
+
+        case SpecialKey::KEY_ESC:
+            if (isDrawing) {
+                isDrawing = false;
+                return true;
+            }
+            return false;
 
         default:
             return false;

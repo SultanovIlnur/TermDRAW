@@ -32,6 +32,9 @@ void Toolbar::draw(Focus currentFocus) {
     moveCursor(3, getTerminalSize().y - 1);
     Position2D cur = canvas.getCursor();
     std::cout << "Current mode: " << getCurrentMode(currentFocus);
+    if (canvas.getIsDrawing()) {
+        std::cout << " [DRAWING]";
+    }
     std::cout << " | X: " << cur.x << "  Y: " << cur.y << "  ";
 
     if (activeSubMenu) {

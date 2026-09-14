@@ -15,13 +15,15 @@ class Canvas {
         void clear();
         void draw() const;
 
-        // moving the painting cursor on ui
         Position2D getCursor() const;
         void moveCursorBy(int dx, int dy);
         bool handleInput(SpecialKey key, Tool currentTool);
+        bool getIsDrawing() const;
 
     private:
         std::vector<std::unique_ptr<Shape>> shapes;
         Position2D cursorPos;
-
+        Position2D startPos;
+        bool isDrawing;
+        Tool currentDrawingTool;
 };
