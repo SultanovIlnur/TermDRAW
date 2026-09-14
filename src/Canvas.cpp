@@ -24,7 +24,7 @@ void Canvas::clear() {
 void Canvas::draw() const {
     Position2D term = getTerminalSize();
     std::cout << "\033[90;44m";
-    for (int y = 3; y < term.y - 1; y += 2) {
+    for (int y = 3; y < term.y - 2; y += 2) {
         for (int x = 10; x < term.x - 1; x += 4) {
             moveCursor(x, y);
             std::cout << "·";

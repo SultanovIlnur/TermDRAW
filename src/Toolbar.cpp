@@ -29,14 +29,34 @@ void Toolbar::draw(Focus currentFocus) {
             std::cout << " ";
         i++;
     }
-    moveCursor(3, getTerminalSize().y - 1);
-    Position2D cur = canvas.getCursor();
-    std::cout << "Current mode: " << getCurrentMode(currentFocus);
-    if (canvas.getIsDrawing()) {
-        std::cout << " [DRAWING]";
+    Position2D term = getTerminalSize();
+
+    moveCursor(1, term.y - 2);
+    std::cout << "╠";
+    for (int x = 2; x < term.x; ++x) {
+        std::cout << "═";
     }
-    std::cout << " | X: " << cur.x << "  Y: " << cur.y << "  ";
-    std::cout << "| Color: " << canvas.getCurrentColor() << "■ " << canvas.getCurrentColorName() << DOS_COLOR << "  ";
+    std::cout << "╣";
+
+    moveCursor(2, term.y - 1);
+    for (int x = 2; x < term.x; ++x) {
+        std::cout << " ";
+    }
+
+    moveCursor(3, term.y - 1);
+    Position2D cur = canvas.getCursor();
+    if (canvas.getIsDrawing()) {
+        std::cout << "\033[7m Enter \033[27m Place  ";
+        std::cout << "\033[7m Esc \033[27m Cancel";
+    } else {
+        std::cout << "\033[7m Tab \033[27m Focus  ";
+        std::cout << "\033[7m Enter \033[27m Draw  ";
+        std::cout << "\033[7m C \033[27m Color  ";
+        std::cout << "\033[7m Q \033[27m Quit";
+    }
+    std::cout << " │ Mode: " << getCurrentMode(currentFocus);
+    std::cout << " │ " << cur.x << "," << cur.y;
+    std::cout << " │ " << canvas.getCurrentColor() << "■ " << canvas.getCurrentColorName() << DOS_COLOR;
 
     if (activeSubMenu) {
         const auto& currentSection = menus[selectedButton];
