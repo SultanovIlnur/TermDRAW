@@ -36,6 +36,7 @@ void Toolbar::draw(Focus currentFocus) {
         std::cout << " [DRAWING]";
     }
     std::cout << " | X: " << cur.x << "  Y: " << cur.y << "  ";
+    std::cout << "| Color: " << canvas.getCurrentColor() << "■ " << canvas.getCurrentColorName() << DOS_COLOR << "  ";
 
     if (activeSubMenu) {
         const auto& currentSection = menus[selectedButton];
@@ -75,7 +76,9 @@ void Toolbar::initMenu() {
 
     MenuSection optionMenu;
     optionMenu.caption = "Options";
-    // TODO ADD ITEMS
+    for (size_t i = 0; i < PALETTE.size(); ++i) {
+        optionMenu.items.push_back({PALETTE[i].name, [this, i]() { canvas.setColorIndex(static_cast<int>(i)); }});
+    }
 
     MenuSection helpMenu;
     helpMenu.caption = "Help";

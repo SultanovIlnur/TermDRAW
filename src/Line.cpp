@@ -2,7 +2,8 @@
 #include <cmath>
 #include <iostream>
 
-Line::Line(Position2D start, Position2D end) : start(start), end(end) {}
+Line::Line(Position2D start, Position2D end, std::string color)
+    : Shape(color), start(start), end(end) {}
 
 Position2D Line::getStart() const {
     return start;
@@ -35,6 +36,7 @@ void Line::draw() const {
         ch = "╱";
     }
 
+    std::cout << color;
     while (true) {
         moveCursor(x0, y0);
         std::cout << ch;
@@ -53,5 +55,5 @@ void Line::draw() const {
             y0 += sy;
         }
     }
+    std::cout << DOS_COLOR;
 }
-

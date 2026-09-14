@@ -15,6 +15,7 @@ enum struct SpecialKey {
     KEY_ESC,
     KEY_TAB,
     KEY_Q,
+    KEY_C,
     KEY_BACKSPACE,
     KEY_UNKNOWN
 };

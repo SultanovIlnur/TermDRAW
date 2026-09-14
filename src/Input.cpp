@@ -14,8 +14,14 @@ SpecialKey readKey() {
             if (bytesWaiting == 0) {
                 return SpecialKey::KEY_ESC;
             }
-            std::cin.get(); // skip the '[' character
-            char arrowKey = std::cin.get();
+            char nextChar = '\0';
+            if (read(STDIN_FILENO, &nextChar, 1) <= 0) {
+                return SpecialKey::KEY_ESC;
+            }
+            char arrowKey = '\0';
+            if (read(STDIN_FILENO, &arrowKey, 1) <= 0) {
+                return SpecialKey::KEY_UNKNOWN;
+            }
             switch (arrowKey) {
                 case 'A':
                     return SpecialKey::ARROW_KEY_UP;
@@ -34,6 +40,9 @@ SpecialKey readKey() {
         case 'q':
         case 'Q':
             return SpecialKey::KEY_Q;
+        case 'c':
+        case 'C':
+            return SpecialKey::KEY_C;
         case '\b':
         case '\177':
             return SpecialKey::KEY_BACKSPACE;

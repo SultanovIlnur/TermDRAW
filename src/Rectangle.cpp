@@ -1,8 +1,10 @@
 #include "Rectangle.hpp"
 
-Rectangle::Rectangle(Position2D pos, int width, int height) : pos(pos), width(width), height(height) {}
+Rectangle::Rectangle(Position2D pos, int width, int height, std::string color)
+    : Shape(color), pos(pos), width(width), height(height) {}
 
 void Rectangle::draw() const {
+    std::cout << color;
     moveCursor(pos.x, pos.y);
     std::cout << "┌";
 
@@ -25,4 +27,5 @@ void Rectangle::draw() const {
         std::cout << "─";
     }
     std::cout << "┘";
+    std::cout << DOS_COLOR;
 }

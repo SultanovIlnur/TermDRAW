@@ -7,7 +7,9 @@
 #include <algorithm>
 #include <cmath>
 
-Canvas::Canvas() : cursorPos{10, 5}, startPos{10, 5}, isDrawing(false), currentDrawingTool(Tool::Rectangle) {}
+Canvas::Canvas()
+    : cursorPos{10, 5}, startPos{10, 5}, isDrawing(false),
+      currentDrawingTool(Tool::Rectangle), currentColorIndex(0) {}
 
 void Canvas::addShape(std::unique_ptr<Shape> shape) {
     shapes.push_back(std::move(shape));
@@ -38,10 +40,10 @@ void Canvas::draw() const {
             int top = std::min(startPos.y, cursorPos.y);
             int width = std::max(2, std::abs(cursorPos.x - startPos.x) + 1);
             int height = std::max(2, std::abs(cursorPos.y - startPos.y) + 1);
-            Rectangle preview({left, top}, width, height);
+            Rectangle preview({left, top}, width, height, getCurrentColor());
             preview.draw();
         } else if (currentDrawingTool == Tool::Line) {
-            Line preview(startPos, cursorPos);
+            Line preview(startPos, cursorPos, getCurrentColor());
             preview.draw();
         }
     }
@@ -63,6 +65,24 @@ bool Canvas::getIsDrawing() const {
     return isDrawing;
 }
 
+void Canvas::cycleColor() {
+    currentColorIndex = (currentColorIndex + 1) % PALETTE.size();
+}
+
+void Canvas::setColorIndex(int index) {
+    if (index >= 0 && index < static_cast<int>(PALETTE.size())) {
+        currentColorIndex = index;
+    }
+}
+
+std::string Canvas::getCurrentColor() const {
+    return PALETTE[currentColorIndex].code;
+}
+
+std::string Canvas::getCurrentColorName() const {
+    return PALETTE[currentColorIndex].name;
+}
+
 bool Canvas::handleInput(SpecialKey key, Tool currentTool) {
     switch (key) {
         case SpecialKey::ARROW_KEY_UP:
@@ -78,6 +98,10 @@ bool Canvas::handleInput(SpecialKey key, Tool currentTool) {
             moveCursorBy(1, 0);
             return true;
 
+        case SpecialKey::KEY_C:
+            cycleColor();
+            return true;
+
         case SpecialKey::KEY_ENTER:
             if (!isDrawing) {
                 isDrawing = true;
@@ -89,9 +113,9 @@ bool Canvas::handleInput(SpecialKey key, Tool currentTool) {
                     int top = std::min(startPos.y, cursorPos.y);
                     int width = std::max(2, std::abs(cursorPos.x - startPos.x) + 1);
                     int height = std::max(2, std::abs(cursorPos.y - startPos.y) + 1);
-                    addShape(std::make_unique<Rectangle>(Position2D{left, top}, width, height));
+                    addShape(std::make_unique<Rectangle>(Position2D{left, top}, width, height, getCurrentColor()));
                 } else if (currentDrawingTool == Tool::Line) {
-                    addShape(std::make_unique<Line>(startPos, cursorPos));
+                    addShape(std::make_unique<Line>(startPos, cursorPos, getCurrentColor()));
                 }
                 isDrawing = false;
             }

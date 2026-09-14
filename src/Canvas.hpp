@@ -20,10 +20,16 @@ class Canvas {
         bool handleInput(SpecialKey key, Tool currentTool);
         bool getIsDrawing() const;
 
+        void cycleColor();
+        void setColorIndex(int index);
+        std::string getCurrentColor() const;
+        std::string getCurrentColorName() const;
+
     private:
         std::vector<std::unique_ptr<Shape>> shapes;
         Position2D cursorPos;
         Position2D startPos;
         bool isDrawing;
         Tool currentDrawingTool;
+        int currentColorIndex;
 };
