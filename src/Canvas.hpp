@@ -28,6 +28,7 @@ class Canvas {
 
         bool saveToFile(const std::string& filename) const;
         bool loadFromFile(const std::string& filename);
+        bool exportImage(const std::string& filename, const std::string& format) const;
 
     private:
         std::vector<std::unique_ptr<Shape>> shapes;

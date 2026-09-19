@@ -28,6 +28,11 @@ const std::vector<ColorInfo> PALETTE = {
     {"Magenta", "\033[95m"}
 };
 
+struct CanvasCell {
+    std::string ch;
+    std::string color;
+};
+
 struct Layer {
     int value;
     bool visibility;

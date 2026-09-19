@@ -62,6 +62,11 @@ void Toolbar::draw(Focus currentFocus) {
         const auto& currentSection = menus[selectedButton];
         
         int menuWidth = 16;
+        for (const auto& item : currentSection.items) {
+            if (static_cast<int>(item.caption.length()) + 4 > menuWidth) {
+                menuWidth = static_cast<int>(item.caption.length()) + 4;
+            }
+        }
         int menuHeight = static_cast<int>(currentSection.items.size()) + 1;
         
         Panel popupPanel(
@@ -73,11 +78,11 @@ void Toolbar::draw(Focus currentFocus) {
         popupPanel.draw();
         for (const auto& item : currentSection.items) {
             if (selectedSubMenuButton == &item - &currentSection.items[0]) {
-                std::cout << "\033[7m"; // inverse color
+                std::cout << "\033[7m";
             }
             moveCursor(selectedX + 1, 4 + &item - &currentSection.items[0]);
             std::cout << item.caption;
-            std::cout << "\033[27m"; // reset color
+            std::cout << "\033[27m";
         }
     }
 }
@@ -88,6 +93,9 @@ void Toolbar::initMenu() {
     fileMenu.items.push_back({"New file", [this]() { canvas.clear(); }});
     fileMenu.items.push_back({"Open file", [this]() { canvas.loadFromFile("drawing.td"); }});
     fileMenu.items.push_back({"Save file", [this]() { canvas.saveToFile("drawing.td"); }});
+    fileMenu.items.push_back({"Export PNG", [this]() { canvas.exportImage("drawing.png", "png"); }});
+    fileMenu.items.push_back({"Export BMP", [this]() { canvas.exportImage("drawing.bmp", "bmp"); }});
+    fileMenu.items.push_back({"Export JPG", [this]() { canvas.exportImage("drawing.jpg", "jpg"); }});
     fileMenu.items.push_back({"Exit", actionShutdown});
 
     MenuSection editMenu;

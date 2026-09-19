@@ -3,6 +3,7 @@
 #include "Rectangle.hpp"
 #include "Line.hpp"
 #include "Screen.hpp"
+#include "ImageExporter.hpp"
 #include <memory>
 #include <algorithm>
 #include <cmath>
@@ -120,6 +121,26 @@ bool Canvas::loadFromFile(const std::string& filename) {
     shapes = std::move(loadedShapes);
     isDrawing = false;
     return true;
+}
+
+bool Canvas::exportImage(const std::string& filename, const std::string& format) const {
+    Position2D term = getTerminalSize();
+    int rows = term.y;
+    int cols = term.x;
+
+    std::vector<std::vector<CanvasCell>> grid(rows, std::vector<CanvasCell>(cols, {" ", DOS_COLOR}));
+
+    for (int y = 3; y < rows - 2; y += 2) {
+        for (int x = 10; x < cols - 1; x += 4) {
+            grid[y][x] = {"·", "\033[90m"};
+        }
+    }
+
+    for (const auto& shape : shapes) {
+        shape->render(grid);
+    }
+
+    return ImageExporter::exportToFile(grid, filename, format);
 }
 
 bool Canvas::handleInput(SpecialKey key, Tool currentTool) {
