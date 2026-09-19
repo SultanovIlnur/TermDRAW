@@ -21,3 +21,6 @@ g++ -std=c++17 main.cpp src/*.cpp -o td
 
 ## AI usage
 No AI was used. This is not a vibecoded project, just a pure human slop :)
+
+## License
+[MIT](LICENSE)
