@@ -16,8 +16,18 @@ enum struct SpecialKey {
     KEY_TAB,
     KEY_Q,
     KEY_C,
+    KEY_CHAR,
     KEY_BACKSPACE,
     KEY_UNKNOWN
 };
 
-SpecialKey readKey();
+struct KeyEvent {
+    SpecialKey key;
+    char ch;
+
+    operator SpecialKey() const {
+        return key;
+    }
+};
+
+KeyEvent readKey();

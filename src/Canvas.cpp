@@ -2,6 +2,7 @@
 #include "Input.hpp"
 #include "Rectangle.hpp"
 #include "Line.hpp"
+#include "Text.hpp"
 #include "Screen.hpp"
 #include "ImageExporter.hpp"
 #include <memory>
@@ -10,8 +11,8 @@
 #include <fstream>
 
 Canvas::Canvas()
-    : cursorPos{10, 5}, startPos{10, 5}, isDrawing(false),
-      currentDrawingTool(Tool::Rectangle), currentColorIndex(0) {}
+    : cursorPos{10, 5}, startPos{10, 5}, isDrawing(false), isTyping(false),
+      currentText(""), currentDrawingTool(Tool::Rectangle), currentColorIndex(0) {}
 
 void Canvas::addShape(std::unique_ptr<Shape> shape) {
     shapes.push_back(std::move(shape));
@@ -20,6 +21,8 @@ void Canvas::addShape(std::unique_ptr<Shape> shape) {
 void Canvas::clear() {
     shapes.clear();
     isDrawing = false;
+    isTyping = false;
+    currentText.clear();
 }
 
 void Canvas::draw() const {
@@ -50,8 +53,15 @@ void Canvas::draw() const {
         }
     }
 
-    moveCursor(cursorPos.x, cursorPos.y);
-    std::cout << "\033[7m \033[27m";
+    if (isTyping) {
+        moveCursor(startPos.x, startPos.y);
+        std::cout << getCurrentColor() << currentText << DOS_COLOR;
+        moveCursor(startPos.x + static_cast<int>(currentText.length()), startPos.y);
+        std::cout << "\033[7m \033[27m";
+    } else {
+        moveCursor(cursorPos.x, cursorPos.y);
+        std::cout << "\033[7m \033[27m";
+    }
 }
 
 Position2D Canvas::getCursor() const {
@@ -65,6 +75,10 @@ void Canvas::moveCursorBy(int dx, int dy) {
 
 bool Canvas::getIsDrawing() const {
     return isDrawing;
+}
+
+bool Canvas::getIsTyping() const {
+    return isTyping;
 }
 
 void Canvas::cycleColor() {
@@ -116,10 +130,20 @@ bool Canvas::loadFromFile(const std::string& filename) {
             if (in >> x0 >> y0 >> x1 >> y1 >> col) {
                 loadedShapes.push_back(std::make_unique<Line>(Position2D{x0, y0}, Position2D{x1, y1}, col));
             }
+        } else if (type == "TEXT") {
+            int x, y;
+            std::string col;
+            if (in >> x >> y >> col) {
+                std::string txt;
+                std::getline(in >> std::ws, txt);
+                loadedShapes.push_back(std::make_unique<Text>(Position2D{x, y}, txt, col));
+            }
         }
     }
     shapes = std::move(loadedShapes);
     isDrawing = false;
+    isTyping = false;
+    currentText.clear();
     return true;
 }
 
@@ -143,8 +167,35 @@ bool Canvas::exportImage(const std::string& filename, const std::string& format)
     return ImageExporter::exportToFile(grid, filename, format);
 }
 
-bool Canvas::handleInput(SpecialKey key, Tool currentTool) {
-    switch (key) {
+bool Canvas::handleInput(KeyEvent key, Tool currentTool) {
+    if (isTyping) {
+        if (key.key == SpecialKey::KEY_ENTER) {
+            if (!currentText.empty()) {
+                addShape(std::make_unique<Text>(startPos, currentText, getCurrentColor()));
+            }
+            isTyping = false;
+            currentText.clear();
+            return true;
+        }
+        if (key.key == SpecialKey::KEY_ESC) {
+            isTyping = false;
+            currentText.clear();
+            return true;
+        }
+        if (key.key == SpecialKey::KEY_BACKSPACE) {
+            if (!currentText.empty()) {
+                currentText.pop_back();
+            }
+            return true;
+        }
+        if (key.ch >= 32 && key.ch <= 126) {
+            currentText += key.ch;
+            return true;
+        }
+        return false;
+    }
+
+    switch (key.key) {
         case SpecialKey::ARROW_KEY_UP:
             moveCursorBy(0, -1);
             return true;
@@ -163,6 +214,12 @@ bool Canvas::handleInput(SpecialKey key, Tool currentTool) {
             return true;
 
         case SpecialKey::KEY_ENTER:
+            if (currentTool == Tool::Text) {
+                isTyping = true;
+                startPos = cursorPos;
+                currentText.clear();
+                return true;
+            }
             if (!isDrawing) {
                 isDrawing = true;
                 startPos = cursorPos;

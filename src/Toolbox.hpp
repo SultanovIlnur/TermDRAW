@@ -6,14 +6,14 @@
 
 #include "../Types.hpp"
 #include "Input.hpp"
-#include "Toolbox.hpp"
 #include "Panel.hpp"
 #include "Screen.hpp"
 
 enum class Tool {
     Rectangle,
     Line,
-    Circle
+    Circle,
+    Text
 };
 
 struct ToolItem {

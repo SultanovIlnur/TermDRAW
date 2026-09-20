@@ -18,8 +18,9 @@ class Canvas {
 
         Position2D getCursor() const;
         void moveCursorBy(int dx, int dy);
-        bool handleInput(SpecialKey key, Tool currentTool);
+        bool handleInput(KeyEvent key, Tool currentTool);
         bool getIsDrawing() const;
+        bool getIsTyping() const;
 
         void cycleColor();
         void setColorIndex(int index);
@@ -35,6 +36,8 @@ class Canvas {
         Position2D cursorPos;
         Position2D startPos;
         bool isDrawing;
+        bool isTyping;
+        std::string currentText;
         Tool currentDrawingTool;
         int currentColorIndex;
 };

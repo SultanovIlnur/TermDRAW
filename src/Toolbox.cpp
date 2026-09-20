@@ -4,6 +4,7 @@ Toolbox::Toolbox() : selectedIndex(0) {
     tools.push_back({Tool::Rectangle, "[ □ ]"});
     tools.push_back({Tool::Line,      "[ ╱ ]"});
     tools.push_back({Tool::Circle,    "[ ○ ]"});
+    tools.push_back({Tool::Text,      "[ A ]"});
 }
 
 Tool Toolbox::getSelectedTool() const {
@@ -11,7 +12,7 @@ Tool Toolbox::getSelectedTool() const {
 }
 
 void Toolbox::draw(bool isFocused) const {
-    Panel panel({2, 3}, {8, 7}, DOS_COLOR, 1);
+    Panel panel({2, 3}, {8, 8}, DOS_COLOR, 1);
     panel.draw();
     for (size_t i = 0; i < tools.size(); ++i) {
         moveCursor(3, 4 + static_cast<int>(i));

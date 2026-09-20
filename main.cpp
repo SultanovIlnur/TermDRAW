@@ -87,7 +87,7 @@ int main()
     while (running) {
         drawUi();
         std::cout.flush();
-        SpecialKey key = readKey();
+        KeyEvent key = readKey();
 
         if (currentFocus == Focus::Dialog && activeDialog) {
             activeDialog->handleInput(key);
@@ -96,7 +96,7 @@ int main()
                 currentFocus = Focus::Canvas;
             }
         }
-        else if (key == SpecialKey::KEY_TAB) {
+        else if (key == SpecialKey::KEY_TAB && !canvas.getIsTyping()) {
             toggleFocus();
         }
         else {
@@ -119,7 +119,7 @@ int main()
         }
 
         std::cout.flush();
-        if (key == SpecialKey::KEY_Q) {
+        if (key == SpecialKey::KEY_Q && !canvas.getIsTyping()) {
             running = false;
         }
     }

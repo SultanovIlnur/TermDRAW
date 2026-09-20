@@ -45,7 +45,10 @@ void Toolbar::draw(Focus currentFocus) {
 
     moveCursor(3, term.y - 1);
     Position2D cur = canvas.getCursor();
-    if (canvas.getIsDrawing()) {
+    if (canvas.getIsTyping()) {
+        std::cout << "\033[7m Enter \033[27m Finish  ";
+        std::cout << "\033[7m Esc \033[27m Cancel";
+    } else if (canvas.getIsDrawing()) {
         std::cout << "\033[7m Enter \033[27m Place  ";
         std::cout << "\033[7m Esc \033[27m Cancel";
     } else {
@@ -54,7 +57,7 @@ void Toolbar::draw(Focus currentFocus) {
         std::cout << "\033[7m C \033[27m Color  ";
         std::cout << "\033[7m Q \033[27m Quit";
     }
-    std::cout << " │ Mode: " << getCurrentMode(currentFocus);
+    std::cout << " │ Mode: " << (canvas.getIsTyping() ? "TEXT" : getCurrentMode(currentFocus));
     std::cout << " │ " << cur.x << "," << cur.y;
     std::cout << " │ " << canvas.getCurrentColor() << "■ " << canvas.getCurrentColorName() << DOS_COLOR;
 
